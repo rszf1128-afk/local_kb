@@ -1,0 +1,203 @@
+name: local_kb
+version: 1
+scope: "Portable local knowledge-base module for any engineering or project knowledge, with PX4/QGC/embedded/shared as seed domains"
+entrypoint: "local_kb/README.md"
+
+ai_interface:
+  bootstrap_prompt: "local_kb/kb_bootstrap_prompt.md"
+  user_manual: "local_kb/kb_user_manual.md"
+  usage_guide: "local_kb/kb_usage_guide.md"
+  obsidian_conventions: "local_kb/kb_obsidian_conventions.md"
+  creation_policy: "local_kb/kb_creation_policy.md"
+  confirmation_workflow: "local_kb/kb_confirmation_workflow.md"
+  capture_template: "local_kb/templates/capture_note_template.md"
+
+machine_interface:
+  skill: ".trae/skills/local-kb-orchestrator/SKILL.md"
+  skill_role: "optional adapter, can be generated or adjusted after initial integration"
+  dispatcher_script: "local_kb/tools/kb_dispatch.py"
+  preferred_commands:
+    - "python3 local_kb/tools/kb_dispatch.py bootstrap-prompt"
+    - "python3 local_kb/tools/kb_dispatch.py intent --text '帮我总结今天的 QGC 调试'"
+    - "python3 local_kb/tools/kb_dispatch.py route --text 'PX4 仿真船不动'"
+    - "python3 local_kb/tools/kb_dispatch.py propose-create --text '这是一个新的知识主题'"
+    - "python3 local_kb/tools/kb_dispatch.py create-from-confirmation --creation-type new-note --text '新的知识主题' --domain shared --confirm"
+
+default_read_order:
+  - "START_WITH_AI.md"
+  - "local_kb/README.md"
+  - "local_kb/kb_user_manual.md"
+  - "local_kb/kb_obsidian_conventions.md"
+
+domain_routing:
+  px4:
+    keywords:
+      - "PX4"
+      - "uORB"
+      - "EKF2"
+      - "SITL"
+      - "HITL"
+      - "airframe"
+      - "飞控"
+    read:
+      - "local_kb/domains/px4/README.md"
+
+  qgc:
+    keywords:
+      - "QGC"
+      - "QGroundControl"
+      - "MAVLink"
+      - "FactPanel"
+      - "QML"
+      - "地面站"
+    read:
+      - "local_kb/domains/qgc/README.md"
+
+  embedded:
+    keywords:
+      - "STM32"
+      - "STM32H7"
+      - "STM32H73"
+      - "嵌入式"
+      - "驱动"
+      - "串口"
+      - "FreeRTOS"
+      - "NuttX"
+    read:
+      - "local_kb/domains/embedded/README.md"
+
+  demo:
+    keywords:
+      - "demo"
+      - "演示"
+      - "示例"
+      - "电机不转"
+      - "机器人"
+      - "执行器"
+    read:
+      - "local_kb/domains/demo/README.md"
+      - "local_kb/domains/demo/demo_motor_not_spinning_pattern.md"
+
+  shared:
+    keywords:
+      - "流程"
+      - "规范"
+      - "主线"
+      - "新对话"
+      - "当前对话"
+      - "架构主线"
+      - "复盘"
+      - "方法"
+      - "协作"
+      - "通用"
+      - "文档"
+      - "知识库"
+      - "提示词"
+      - "skill"
+      - "路由"
+      - "Obsidian"
+      - "图谱"
+      - "思想宫殿"
+      - "优化知识库"
+      - "修改知识库"
+      - "元知识"
+      - "新主题"
+      - "正式知识"
+      - "草稿"
+      - "确认创建"
+      - "不要自动创建"
+      - "写正式知识"
+    read:
+      - "local_kb/domains/shared/README.md"
+      - "local_kb/domains/shared/local_cognition_protocol.md"
+      - "local_kb/domains/shared/knowledge_system_evolution.md"
+      - "local_kb/kb_creation_policy.md"
+      - "local_kb/kb_confirmation_workflow.md"
+      - "local_kb/kb_obsidian_conventions.md"
+
+intent_routing:
+  retrieve:
+    keywords:
+      - "怎么"
+      - "为什么"
+      - "排查"
+      - "分析"
+      - "定位"
+      - "查一下"
+      - "看看"
+      - "解释"
+    action: "先读取总 manifest，再路由到最相关的 domain knowledge base，最小化读取，优先复用已有经验"
+
+  capture:
+    keywords:
+      - "总结"
+      - "复盘"
+      - "沉淀"
+      - "记录"
+      - "归档"
+      - "回写"
+      - "经验"
+      - "记忆"
+      - "写进知识库"
+    action: "先整理 observation/interpretation/action，再生成 capture note 草稿，并建议回写位置"
+
+  package_or_governance:
+    keywords:
+      - "操作手册"
+      - "同事"
+      - "技能"
+      - "主线"
+      - "新对话"
+      - "当前对话"
+      - "架构主线"
+      - "治理"
+      - "协议"
+      - "框架"
+      - "本地认知"
+      - "协作系统"
+      - "使命层"
+      - "最高层目标"
+      - "公开定位"
+      - "prompt"
+      - "提示词"
+      - "知识库结构"
+      - "规范"
+      - "流程"
+      - "创建"
+      - "--confirm"
+      - "试跑"
+      - "落盘"
+      - "frontmatter"
+      - "wikilink"
+      - "MOC"
+      - "图谱"
+      - "新主题"
+      - "正式知识"
+      - "草稿"
+      - "确认创建"
+    action: "优先读取总库入口、用户手册、Obsidian 约定和技能文件"
+
+writeback_policy:
+  principle: "优先写入总库规则文档或对应 domain 的通用说明"
+  pattern: "优先写入对应 domain 的长期经验文档"
+  case: "优先落入 capture 草稿，再人工并入正式知识文件"
+  checklist: "优先写入用户手册或 domain playbook"
+
+creation_policy:
+  require_user_confirmation_for_new_knowledge: true
+  require_user_confirmation_for_new_domain: true
+  when_no_domain_matches:
+    - "不要自动创建新领域"
+    - "先请求用户确认是否创建新领域或新知识笔记"
+  when_domain_matches_but_no_existing_note:
+    - "不要直接写入正式知识"
+    - "先询问用户是否创建新笔记草稿"
+  templates:
+    new_domain: "local_kb/templates/domain_home_template.md"
+    new_note: "local_kb/templates/capture_note_template.md"
+
+obsidian_rules:
+  use_frontmatter: true
+  use_wikilinks: true
+  use_mocs: true
+  note_language: "Chinese with original English technical terms"
