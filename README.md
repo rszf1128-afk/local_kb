@@ -84,7 +84,7 @@
 先做这 2 步：  
 *Start with these 2 steps:*
 
-1. 把 `pure_kb_module/` 复制到你的工程根目录。  pure_kb_module即为整个工程。
+1. 把 `pure_kb_module/` 复制到你的工程根目录。pure_kb_module即为整个工程。  
    *Copy `pure_kb_module/` into the root of your project.pure_kb_module is the entire project*
 2. 打开 [START_WITH_AI.md](./START_WITH_AI.md)，把里面那段提示词直接贴给 AI。  
    *Open [START_WITH_AI.md](./START_WITH_AI.md) and paste the prompt inside directly to your AI tool.*
