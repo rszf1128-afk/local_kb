@@ -1,0 +1,174 @@
+schema_name: local_kb_adapter_contract
+schema_version: 1
+status: draft
+
+purpose:
+  summary: "Machine-readable contract for projecting local_kb protocol into tool-specific adapters."
+  source_of_truth:
+    manifest: "local_kb/kb_manifest.yaml"
+    protocol_docs:
+      - "START_WITH_AI.md"
+      - "GENERATE_ADAPTER_FOR_YOUR_AI.md"
+      - "ADAPTER_SPEC.md"
+      - "ADAPTER_SCHEMA.yaml"
+
+document_roles:
+  stage_1_entry: "START_WITH_AI.md"
+  stage_2_generation: "GENERATE_ADAPTER_FOR_YOUR_AI.md"
+  human_contract: "ADAPTER_SPEC.md"
+  machine_contract: "ADAPTER_SCHEMA.yaml"
+
+core_principles:
+  adapter_is_derivative: true
+  manifest_is_single_fixed_entry: true
+  minimal_read_required: true
+  reuse_existing_knowledge_first: true
+  require_confirmation_before_new_domain: true
+  require_confirmation_before_formal_note: true
+  prefer_capture_draft_before_formal_note: true
+
+generation_phases:
+  - id: inspect
+    required: true
+    outputs:
+      - tool_name
+      - supported_carriers
+      - matched_domain
+      - existing_adapter_paths
+  - id: project
+    required: true
+    outputs:
+      - carrier_type
+      - target_path
+      - adapter_content
+  - id: verify
+    required: true
+    outputs:
+      - validation_steps
+      - validation_queries
+      - known_gaps
+
+intent_routing:
+  required: true
+  order:
+    - retrieve
+    - capture
+    - package_or_governance
+
+domain_routing:
+  required: true
+  source: "local_kb/kb_manifest.yaml"
+  behavior:
+    use_manifest_domain_routing: true
+    do_not_hardcode_domain_as_first_entry: true
+
+minimal_read_policy:
+  required: true
+  must_read:
+    - "local_kb/kb_manifest.yaml"
+  optional_read:
+    - "local_kb/domains/<domain>/README.md"
+    - "<existing_tool_adapter>"
+    - "<tool_specific_minimal_doc>"
+  restrictions:
+    - "Do not read the whole repository by default."
+    - "Do not permanently pin arbitrary docs as first read."
+    - "Only read files needed for current adapter generation."
+
+reuse_policy:
+  required: true
+  behaviors:
+    prefer_formal_notes: true
+    then_consider_drafts: true
+    avoid_duplicate_equivalent_docs: true
+
+creation_policy:
+  required: true
+  new_domain:
+    require_user_confirmation: true
+  new_formal_knowledge:
+    require_user_confirmation: true
+  old_conversation_capture:
+    prefer_draft_output: true
+
+output_contract:
+  required_fields:
+    - reads_used
+    - reused_experience
+    - knowledge_gaps
+    - suggested_writeback
+  preferred_fields:
+    - best_entry
+    - digest
+    - capture
+    - suggested_writeback
+    - governance_feedback
+
+carrier_types:
+  - id: native_file
+    description: "Tool-native file carrier such as skill, agent profile, or workspace rule file."
+    preferred_targets:
+      - ".trae/skills/local-kb-orchestrator/SKILL.md"
+  - id: workspace_instruction
+    description: "Instruction stored in tool workspace settings."
+  - id: reusable_prompt
+    description: "Reusable project-level prompt."
+    fallback_save_path: "local_kb/adapters/<tool>/README.md"
+  - id: command_wrapper
+    description: "Slash command, wrapper script, or task entry."
+
+required_adapter_sections:
+  - tool_identity
+  - carrier_type
+  - fixed_entrypoint
+  - routing_order
+  - minimal_read_boundary
+  - reuse_policy
+  - creation_confirmation
+  - output_expectation
+  - fallback_strategy
+  - validation_steps
+
+validation_contract:
+  required: true
+  minimum_queries:
+    - type: retrieve
+      example: "这个工程里某类已知问题怎么排查"
+    - type: capture
+      example: "请把这次排查沉淀成知识草稿"
+    - type: package_or_governance
+      example: "这个工程的知识库结构还缺什么"
+
+non_compliance_rules:
+  - id: copy_full_kb_into_adapter
+    forbidden: true
+    description: "Do not copy large knowledge-body content into adapter files."
+  - id: bypass_manifest
+    forbidden: true
+    description: "Do not replace manifest as the single fixed entrypoint."
+  - id: bypass_confirmation
+    forbidden: true
+    description: "Do not auto-create new domain or formal knowledge without user confirmation."
+  - id: mix_protocol_and_tool_constraints
+    forbidden: true
+    description: "Do not write tool-specific limits back into protocol as if they were universal rules."
+
+tool_projection_examples:
+  trae:
+    tool_name: "Trae"
+    preferred_carrier: native_file
+    target_path: ".trae/skills/local-kb-orchestrator/SKILL.md"
+    example_asset: "local_kb/adapters/trae/SKILL.example.md"
+  generic_chat_tool:
+    tool_name: "Generic Chat Tool"
+    preferred_carrier: reusable_prompt
+    target_path: "local_kb/adapters/generic-chat-tool/README.md"
+    example_asset: "local_kb/adapters/generic-chat-tool/PROJECT_PROMPT.example.md"
+
+acceptance_checklist:
+  - "Manifest remains the single fixed entrypoint."
+  - "Intent routing runs before domain routing."
+  - "Adapter preserves minimal read behavior."
+  - "Adapter preserves confirmation-before-creation."
+  - "Adapter includes validation steps."
+  - "Adapter does not duplicate large knowledge content."
