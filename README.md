@@ -6,9 +6,6 @@
 > 它公开的是一套可复用的、本地优先的人机协作框架，让你把自己的知识、本地经验和 AI 工作流接进来，并持续演化。  
 > *It publishes a reusable, local-first human-AI collaboration framework that lets you connect your own knowledge, local experience, and AI workflows, then keep evolving them over time.*
 
-由 `pathfinder_czf` 发起与构建。  
-*Initiated and built by `pathfinder_czf`.*
-
 ## 项目概览
 
 这套模块最核心的目标，不是“多存一点内容”，而是让 `AI + 本地知识库 + 人工确认` 形成长期闭环。  
