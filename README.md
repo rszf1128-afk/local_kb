@@ -6,6 +6,8 @@
 > 它公开的是一套可复用的、本地优先的人机协作框架，让你把自己的知识、本地经验和 AI 工作流接进来，并持续演化。  
 > *It publishes a reusable, local-first human-AI collaboration framework that lets you connect your own knowledge, local experience, and AI workflows, then keep evolving them over time.*
 
+【https://github.com/rszf1128-afk/local_kb教程】 https://www.bilibili.com/video/BV1x8VH6uEVz/?share_source=copy_web&vd_source=5d4b33e0957c12bc60060601ac596228
+
 ## 项目概览
 
 这套模块最核心的目标，不是“多存一点内容”，而是让 `AI + 本地知识库 + 人工确认` 形成长期闭环。  
@@ -84,8 +86,8 @@
 先做这 2 步：  
 *Start with these 2 steps:*
 
-1. 把 `pure_kb_module/` 复制到你的工程根目录。由于上传失误，下载后需要将项目最外层文件夹名修改为pure_kb_module。  
-   *Copy `pure_kb_module/` into the root of your project.Due to an upload error, after downloading, you need to rename the outermost folder of the project to pure_kb_module.*
+1. 把 `pure_kb_module/` 复制到你的工程根目录。  
+   *Copy `pure_kb_module/` into the root of your project.*
 2. 打开 [START_WITH_AI.md](./START_WITH_AI.md)，把里面那段提示词直接贴给 AI。  
    *Open [START_WITH_AI.md](./START_WITH_AI.md) and paste the prompt inside directly to your AI tool.*
 
